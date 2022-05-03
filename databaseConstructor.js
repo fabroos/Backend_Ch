@@ -1,20 +1,27 @@
 const fs = require('fs/promises')
-
 module.exports = class Contenedor {
   constructor (path) {
     this.path = path
   }
+  async getAll () {
+    try {
+      let data = await fs.readFile(this.path, 'utf-8')
+      let dataJson = await JSON.parse(data)
+      console.log(dataJson)
+      return dataJson
+    } catch (e) {
+      throw e
+    }
+  }
   async save (obj) {
     try {
-      let data = await this.getAll()
-      data.push(obj)
-      await fs.writeFile(this.path, JSON.stringify(dataJson))
-      console.log('Se ha guardado el objeto')
-    } catch (e) {
-      let dataJson = []
+      let data = await fs.readFile(this.path, 'utf-8')
+      let dataJson = await JSON.parse(data)
       dataJson.push(obj)
       await fs.writeFile(this.path, JSON.stringify(dataJson))
-      console.log('Se ha creado el archivo')
+      return obj
+    } catch (e) {
+      throw new Error('No se pudo guardar el objeto')
     }
   }
   async getById (id) {
@@ -22,9 +29,22 @@ module.exports = class Contenedor {
       let data = await fs.readFile(this.path, 'utf-8')
       let dataJson = await JSON.parse(data)
       let obj = dataJson.find(obj => obj.id === id)
-      return obj || null
+      if (!obj) throw new Error('No se encontró el objeto')
+      return obj
     } catch (e) {
-      return null
+      throw e
+    }
+  }
+  async getLastId () {
+    try {
+      let data = await fs.readFile(this.path, 'utf-8')
+      let dataJson = await JSON.parse(data)
+      let lastId = dataJson.reduce((prev, current) => {
+        return prev.id > current.id ? prev.id : current.id
+      })
+      return lastId
+    } catch (e) {
+      throw e
     }
   }
   async getRandom () {
@@ -43,18 +63,23 @@ module.exports = class Contenedor {
       let dataJson = await JSON.parse(data)
       let objIndex = dataJson.findIndex(obj => obj.id === id)
       if (objIndex > -1) dataJson.splice(objIndex, 1)
-      else return console.log('No se encontró el objeto')
+      else throw new Error('No se encontró el objeto')
       await fs.writeFile(this.path, JSON.stringify(dataJson))
       console.log('Se ha eliminado el objeto')
     } catch (e) {
       throw e
     }
   }
-  async getAll () {
+  async update (id, newInfo) {
     try {
       let data = await fs.readFile(this.path, 'utf-8')
       let dataJson = await JSON.parse(data)
-      return dataJson
+      let objIndex = dataJson.findIndex(obj => obj.id === id)
+      if (objIndex > -1)
+        dataJson[objIndex] = { ...dataJson[objIndex], ...newInfo }
+      else throw new Error('No se encontró el objeto')
+      await fs.writeFile(this.path, JSON.stringify(dataJson))
+      return dataJson[objIndex]
     } catch (e) {
       throw e
     }
