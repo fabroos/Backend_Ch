@@ -29,24 +29,17 @@ module.exports = class Contenedor {
       let data = await fs.readFile(this.path, 'utf-8')
       let dataJson = await JSON.parse(data)
       let obj = dataJson.find(obj => obj.id === id)
-      if (!obj) throw new Error('No se encontró el objeto')
+      if (!obj) {
+        let err = new Error('No se encontró el objeto')
+        err.status = 404
+        throw err
+      }
       return obj
     } catch (e) {
       throw e
     }
   }
-  async getLastId () {
-    try {
-      let data = await fs.readFile(this.path, 'utf-8')
-      let dataJson = await JSON.parse(data)
-      let lastId = dataJson.reduce((prev, current) => {
-        return prev.id > current.id ? prev.id : current.id
-      })
-      return lastId
-    } catch (e) {
-      throw e
-    }
-  }
+
   async getRandom () {
     try {
       let data = await fs.readFile(this.path, 'utf-8')
@@ -63,7 +56,11 @@ module.exports = class Contenedor {
       let dataJson = await JSON.parse(data)
       let objIndex = dataJson.findIndex(obj => obj.id === id)
       if (objIndex > -1) dataJson.splice(objIndex, 1)
-      else throw new Error('No se encontró el objeto')
+      else {
+        let err = new Error('No se encontró el objeto')
+        err.status = 404
+        throw err
+      }
       await fs.writeFile(this.path, JSON.stringify(dataJson))
       console.log('Se ha eliminado el objeto')
     } catch (e) {
@@ -77,7 +74,11 @@ module.exports = class Contenedor {
       let objIndex = dataJson.findIndex(obj => obj.id === id)
       if (objIndex > -1)
         dataJson[objIndex] = { ...dataJson[objIndex], ...newInfo }
-      else throw new Error('No se encontró el objeto')
+      else {
+        let err = new Error('No se encontró el objeto')
+        err.status = 404
+        throw err
+      }
       await fs.writeFile(this.path, JSON.stringify(dataJson))
       return dataJson[objIndex]
     } catch (e) {
