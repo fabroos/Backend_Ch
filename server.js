@@ -1,41 +1,17 @@
 const express = require('express')
-const handlebars = require('express-handlebars')
-const hbs = new handlebars()
+const { engine } = require('express-handlebars')
 const app = express()
-const port = 8080
-
-app.listen(port, () =>
-  console.log(`
-App listening on port ${port}!
-Press Ctrl+C to quit.
-the app is running on http://localhost:${port}
-`)
-)
-app.engine(
-  'hbs',
-  hbs({
-    extname: '.hbs',
-    defaultLayout: 'index.hbs',
-    layoutsDir: './views/layouts',
-    partialsDir: './views/partials'
-  })
-)
-app.set('views', './views')
-app.set('view engine', 'hbs')
+// public folder
 app.use(express.static('public'))
-
-app.get('/', (req, res) => {
-  res.render('home', {
-    title: 'Home',
-    message: 'Welcome to the home page!'
-  })
+// handlebars engine
+app.engine('handlebars', engine({ extname: 'hbs' }))
+app.set('view engine', 'handlebars')
+// Init server
+const port = 8080
+const server = app.listen(port, () => {
+  console.log(`App is running in http://localhost:${server.address().port}`)
 })
 
-const user = {
-  name: 'John',
-  age: 30
-}
-
-app.get('/user', (req, res) => {
-  res.render('user', user)
-})
+// Router
+const webRouter = require('./router/web.js')
+app.use('/', webRouter)
