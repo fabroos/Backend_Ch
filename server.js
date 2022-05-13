@@ -1,26 +1,41 @@
 const express = require('express')
-const router = express.Router()
+const handlebars = require('express-handlebars')
+const hbs = new handlebars()
 const app = express()
-const controller = require('./controller.js')
-router.use(express.urlencoded({ extended: true }))
-router.use(express.json())
+const port = 8080
 
-app.listen(8080, () => {
-  console.log('Server is running on port 8080')
+app.listen(port, () =>
+  console.log(`
+App listening on port ${port}!
+Press Ctrl+C to quit.
+the app is running on http://localhost:${port}
+`)
+)
+app.engine(
+  'hbs',
+  hbs({
+    extname: '.hbs',
+    defaultLayout: 'index.hbs',
+    layoutsDir: './views/layouts',
+    partialsDir: './views/partials'
+  })
+)
+app.set('views', './views')
+app.set('view engine', 'hbs')
+app.use(express.static('public'))
+
+app.get('/', (req, res) => {
+  res.render('home', {
+    title: 'Home',
+    message: 'Welcome to the home page!'
+  })
 })
 
-router.get('/', (req, res) => {
-  res.send(`<h1>Hello World</h1>
-    <p>This is a simple API</p>
-    <ul>
-        <li><a href="/api/products">/api/products</a></li>
-    </ul>`)
+const user = {
+  name: 'John',
+  age: 30
+}
+
+app.get('/user', (req, res) => {
+  res.render('user', user)
 })
-
-router.get('/products', controller.getAll) // ✅
-router.get('/products/:id', controller.getById) // ✅
-router.post('/products', controller.create) // ✅
-router.put('/products/:id', controller.update) // ✅
-router.delete('/products/:id', controller.deleteById) // ✅
-
-app.use('/api', router)
