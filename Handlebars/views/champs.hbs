@@ -1,0 +1,22 @@
+<div>
+    {{#if lovedChamps}}
+        <h2>Most Loved champs</h2>
+        <ul>
+            {{#each lovedChamps}}
+                    <li>
+                        <a href="/champ/{{id}}">{{name}}</a>
+                    </li>
+            {{/each}}
+        </ul>
+    {{/if}}
+    {{#if hatedChamps}}
+        <h2>Most hated Champs</h2>
+        <ul>
+            {{#each hatedChamps}}
+                    <li>
+                        <a href="/champ/{{id}}">{{name}}</a>
+                    </li>
+            {{/each}}
+        </ul>
+    {{/if}}
+</div>
