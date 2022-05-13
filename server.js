@@ -9,6 +9,10 @@ app.listen(8080, () => {
   console.log('Server is running on port 8080')
 })
 
+app.on('error', err => {
+  console.log(err.message)
+})
+
 router.get('/', (req, res) => {
   res.send(`<h1>Hello World</h1>
     <p>This is a simple API</p>

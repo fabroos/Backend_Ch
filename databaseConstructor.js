@@ -7,7 +7,7 @@ module.exports = class Contenedor {
     try {
       let data = await fs.readFile(this.path, 'utf-8')
       let dataJson = await JSON.parse(data)
-      console.log(dataJson)
+
       return dataJson
     } catch (e) {
       throw e
