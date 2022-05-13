@@ -1,0 +1,10 @@
+extends layout
+
+block content
+    h1 Champs
+    p(class="lead")
+        A list of all the champions in the game.
+        ul
+            each champ in champs
+                li
+                    a(href="/")= champ.name
