@@ -17,7 +17,7 @@ module.exports = class Contenedor {
     try {
       let data = await fs.readFile(this.path, 'utf-8')
       let dataJson = await JSON.parse(data)
-      dataJson.push(obj)
+      dataJson.push({ ...obj, id: `${Date.now()}` })
       await fs.writeFile(this.path, JSON.stringify(dataJson))
       return obj
     } catch (e) {
