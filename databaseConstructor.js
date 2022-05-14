@@ -7,7 +7,6 @@ module.exports = class Contenedor {
     try {
       let data = await fs.readFile(this.path, 'utf-8')
       let dataJson = await JSON.parse(data)
-
       return dataJson
     } catch (e) {
       throw e
@@ -30,7 +29,7 @@ module.exports = class Contenedor {
       let dataJson = await JSON.parse(data)
       let obj = dataJson.find(obj => obj.id === id)
       if (!obj) {
-        let err = new Error('No se encontró el objeto')
+        let err = new Error('No se encontró el objeto de id ' + id)
         err.status = 404
         throw err
       }
@@ -57,12 +56,11 @@ module.exports = class Contenedor {
       let objIndex = dataJson.findIndex(obj => obj.id === id)
       if (objIndex > -1) dataJson.splice(objIndex, 1)
       else {
-        let err = new Error('No se encontró el objeto')
+        let err = new Error('No se encontró el objeto con id ' + id)
         err.status = 404
         throw err
       }
       await fs.writeFile(this.path, JSON.stringify(dataJson))
-      console.log('Se ha eliminado el objeto')
     } catch (e) {
       throw e
     }
@@ -75,7 +73,7 @@ module.exports = class Contenedor {
       if (objIndex > -1)
         dataJson[objIndex] = { ...dataJson[objIndex], ...newInfo }
       else {
-        let err = new Error('No se encontró el objeto')
+        let err = new Error('No se encontró el objeto con id ' + id)
         err.status = 404
         throw err
       }

@@ -13,7 +13,7 @@ module.exports = {
   },
   getById: async (req, res) => {
     try {
-      const id = parseInt(req.params.id)
+      const id = req.params.id
       const data = await database.getById(id)
       res.json(data)
     } catch (err) {
@@ -41,12 +41,8 @@ module.exports = {
   },
   update: async (req, res) => {
     try {
-      const id = parseInt(req.params.id)
-      if (isNaN(id)) {
-        let err = new Error('El id debe ser un numero')
-        err.status = 400
-        throw err
-      }
+      const id = req.params.id
+
       if (Object.keys(req.body).length === 0) {
         let err = new Error('Faltan datos')
         err.status = 400
@@ -66,12 +62,7 @@ module.exports = {
   },
   deleteById: async (req, res) => {
     try {
-      const id = parseInt(req.params.id)
-      if (isNaN(id)) {
-        let err = new Error('El id debe ser un numero')
-        err.status = 400
-        throw err
-      }
+      const id = req.params.id
       const data = await database.deleteById(id)
       res.json(data)
     } catch (err) {
