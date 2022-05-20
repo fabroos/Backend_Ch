@@ -1,89 +1,109 @@
-const socket = io()
-socket.emit('request messages')
-// Plantilla para el mensajes
+const socket = io.connect()
 
-const id = localStorage.getItem('id') || Date.now()
-localStorage.setItem('id', id)
+socket.emit('getAllProducts')
+socket.emit('getAllMessages')
 
-const externalMessage = ({ msg, img }) => {
-  return `<div class="chat-message">
-    <div class="flex items-end">
-      <div
-        class="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start"
-      >
-        <div>
-          <span
-            class="px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-300 text-gray-600"
-            >${msg}</span
-          >
-        </div>
-      </div>
-      <img
-        src="${img}"
-        alt=""
-        class="w-6 h-6 rounded-full order-1"
-      />
-    </div>
-  </div>`
+// Productos 🎁 ===========================================================
+
+const productTemplate = ({ title, price, image }) => `
+            <tr>
+              <td class="px-4 py-1 border text-gray-800">${title}</td>
+              <td class="px-4 py-1 text-gray-800 border">
+                $ ${price}
+              </td>
+              <td class="px-4 py-1 border text-gray-800">
+                <img
+                  src="${image}"
+                  onerror="this.src='not-found.png'"
+                  class="w-16 h-16"
+                />
+              </td>
+            </tr>
+`
+
+const productsContainer = document.getElementById('products-container')
+function renderProducts (products) {
+  productsContainer.innerHTML =
+    `<tr>
+  <th class="px-4 pt-1 border font-semibold">Title</th>
+  <th class="px-4 pt-1 border font-semibold">Price</th>
+  <th class="px-4 pt-1 border font-semibold">Image</th>
+</tr>` + products.map(productTemplate).join('')
 }
 
-const propietaryMessage = ({ msg, img }) => {
-  return `<div class="chat-message">
-    <div class="flex items-end justify-end">
-      <div
-        class="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-1 items-end"
-      >
-        <div>
-          <span
-            class="px-4 py-2 rounded-lg inline-block rounded-br-none bg-blue-600 text-white "
-            >${msg}</span
-          >
-        </div>
-      </div>
-      <img
-        src="${img}"
-        alt=""
-        class="w-6 h-6 rounded-full order-2"
-      />
-    </div>
-  </div>`
-}
-
-const user = {
-  name: localStorage.getItem('name') || window.prompt('Ingresa tu nombre'),
-  img: localStorage.getItem('img') || window.prompt('Ingresa tu imagen')
-}
-localStorage.setItem('name', user.name)
-localStorage.setItem('img', user.img)
-document.getElementById('name').textContent = user.name
-document.getElementById('img').src = user.img
-
-// Messages
-let messages = []
-const messagesContainer = document.getElementById('messages')
-
-socket.on('chat message', msgs => {
-  messagesContainer.innerHTML = msgs
-    .map(msg => (id === msg.id ? propietaryMessage(msg) : externalMessage(msg)))
-    .join('')
-  messagesContainer.scrollTop = messagesContainer.scrollHeight
+socket.on('product', products => {
+  renderProducts(products)
 })
 
-document.getElementById('form').addEventListener('submit', e => {
+class product {
+  constructor (name, price, image) {
+    this.title = name
+    this.price = price
+    this.image = image
+    this.id = `${Date.now()}`
+  }
+}
+
+function addProduct (product) {
+  socket.emit('product', product)
+}
+
+const productsForm = document.getElementById('product-form')
+productsForm.addEventListener('submit', e => {
   e.preventDefault()
-  e.stopPropagation()
-  const msg = document.getElementById('input-message').value
-  socket.emit('chat message', {
-    msg,
-    img: user.img,
-    author: user.name,
-    id: id
-  })
+  const form = new FormData(e.target)
+  const newProduct = new product(
+    form.get('title'),
+    form.get('price'),
+    form.get('image')
+  )
+  addProduct(newProduct)
   e.target.reset()
 })
 
-document.getElementById('resetName').addEventListener('click', e => {
-  localStorage.removeItem('name')
-  localStorage.removeItem('img')
-  window.location.reload()
+// Messages 📪 ===========================================================
+const messagesContainer = document.getElementById('messages-container')
+const messageTemplate = ({ message, date, email }) => `
+            <article class="flex border px-4 py-2 text-xs my-1 flex-col md:flex-row">
+              <div class="flex mr-10 flex-wrap">
+                <p class="mr-2 font-bold text-blue-500">${email}</p>
+                <span class="text-orange-600 font-xxs">${date}</span>
+              </div>
+              <p class="text-green-600">${message}</p>
+            </article>
+`
+
+socket.on('message', messages => {
+  renderMessages(messages)
+})
+
+class Message {
+  constructor (name, message) {
+    this.email = name
+    this.message = message
+    this.timestamp = `${Date.now()}`
+    this.id = `${Date.now()}`
+  }
+}
+
+function addMessage (message) {
+  socket.emit('message', message)
+}
+
+function renderMessages (messages) {
+  messagesContainer.innerHTML = messages
+    .map(({ message, email, timestamp }) =>
+      messageTemplate({
+        message,
+        email,
+        date: Date(timestamp).toLocaleString()
+      })
+    )
+    .join('')
+}
+
+document.getElementById('message-form').addEventListener('submit', e => {
+  e.preventDefault()
+  const message = new Message(e.target.email.value, e.target.message.value)
+  addMessage(message)
 })
