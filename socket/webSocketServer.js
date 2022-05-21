@@ -1,5 +1,8 @@
 const { Server: WebSocketServer } = require('socket.io')
 
+/* -------------------------------------------------------------------------- */
+/*                              Web Socket Server                             */
+/* -------------------------------------------------------------------------- */
 const ProductController = require('./productController')
 const messagesController = require('./messagesController')
 function createWebScoketServer (server) {
