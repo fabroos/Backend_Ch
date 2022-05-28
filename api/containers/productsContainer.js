@@ -54,9 +54,22 @@ class container {
         error.status = 404
         throw error
       }
+      const { title, img, price } = product
+      let newProduct = {
+        ...products[productIndex]
+      }
+      if (title) {
+        newProduct.title = title
+      }
+      if (img) {
+        newProduct.img = img
+      }
+      if (price) {
+        newProduct.price = price
+      }
       products[productIndex] = {
         ...products[productIndex],
-        ...product
+        ...newProduct
       }
       await fs.promises.writeFile(this.path, JSON.stringify(products))
       return products[productIndex]
