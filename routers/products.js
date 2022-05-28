@@ -7,7 +7,7 @@ function checkAdmin (req, res, next) {
   if (adminManage.isAdmin) {
     next()
   } else {
-    res.status(401).json({ error: 404, message: 'You are not authorized' })
+    res.status(401).json({ status: 404, description: 'You are not authorized' })
   }
 }
 
