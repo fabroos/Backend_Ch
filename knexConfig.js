@@ -26,7 +26,10 @@ const adminConfig = {
 
 export function getConfig (mode) {
   return mode === 'mysql'
-    ? { client: 'sqlite3', connection: adminConfig }
+    ? {
+        client: 'mysql2',
+        connection: adminConfig
+      }
     : {
         client: 'sqlite3',
         connection: {
