@@ -1,4 +1,4 @@
-const express = require('express')
+import express from 'express'
 const webRouter = express.Router()
 
 // Routes
@@ -9,4 +9,4 @@ webRouter.post('/products', (req, res) =>
   res.sendFile('index.html', { root: './public' })
 )
 
-module.exports = webRouter
+export default webRouter

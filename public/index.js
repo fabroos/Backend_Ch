@@ -1,7 +1,12 @@
 const socket = io.connect()
 
-socket.emit('getAllProducts')
-socket.emit('getAllMessages')
+fetch('/api/products')
+  .then(res => res.json())
+  .then(res => renderProducts(res))
+
+fetch('/api/messages')
+  .then(res => res.json())
+  .then(res => renderMessages(res))
 
 // Productos 🎁 ===========================================================
 
@@ -73,7 +78,7 @@ const messageTemplate = ({ message, date, email }) => `
             </article>
 `
 
-socket.on('message', messages => {
+socket.on('post message', messages => {
   renderMessages(messages)
 })
 
