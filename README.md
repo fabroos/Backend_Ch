@@ -1,237 +1,185 @@
-# Entrega 9
+# MongoDB
 
-Definir las claves de los documentos en relación a los campos de las tablas de esa base. En el caso de los productos, poner valores al campo precio entre los 100 y 5000 pesos(eligiendo valores intermedios, ej: 120, 580, 900, 1280, 1700, 2300, 2860, 3350, 4320, 4990).
+## Mongodb official driver
 
-# Agregar 10 documentos con valores distintos a las colecciones mensajes y productos
+## Mongooose odm
 
-```
-db.messages.insertMany([{
-    "email": "juan@gmail.com",
-    "message": "Hola, estoy en MongoDB",
-    "timestamp": 1568888888
-},
-{
-    "email": "inain@gmail.com",
-    "message": "Hola, estoy en MongoDB y soy Inain",
-    "timestamp": 1568888300
-},
-{
-    "email": "laslo@gmail.com",
-    "message": "Hola, estoy en MongoDB y soy Laslo",
-    "timestamp": 1568888332
-},
-{
-    "email": "picana@gmail.com",
-    "message": "Hola, estoy en MongoDB y soy Picana",
-    "timestamp": 1568888333
-},
-{
-    "email": "fabri@gmail.com",
-    "message": "Hola, estoy en MongoDB y soy Fabri",
-    "timestamp": 1568888334
-},
-{
-    "email": "saoko@gmail.com",
-    "message": "Hola, estoy en MongoDB y soy Saoko",
-    "timestamp": 1568888335
-},
-{
-    "email": "piringa@gmail.com",
-    "message": "Hola, estoy en MongoDB y soy Piringa",
-    "timestamp": 1568888336
-},
-{
-    "email": "omar@gmail.com",
-    "message": "Hola, estoy en MongoDB y soy Omar",
-    "timestamp": 1568888337
-},
-{
-    "email": "juan@gmail.com",
-    "message": "Hola, estoy en MongoDB y soy Juan",
-    "timestamp": 1568888338
-},
-{
-    "email": "luca@gmail.com",
-    "message": "Hola, estoy en MongoDB y soy Luca",
-    "timestamp": 1568888339
-}]);
+Odm (Object Document Mapper)
 
+es una libreria de js, que por debajo usa mongodb como driver.
 
-db.products.insertMany([
-    {
-        "name": "Laptop",
-        "price": 1200,
-        "image": "https://images-na.ssl-images-amazon.com/images/I/71-X-%2BX-%2BcL._AC_SX425_.jpg"
-    },
-    {
-        "name": "Mouse",
-        "price": 100,
-        "image": "https://images-na.ssl-images-amazon.com/images/I/71-X-%2BX-%2BcL._AC_SX425_.jpg"
-    },
-    {
-        "name": "Keyboard",
-        "price": 200,
-        "image": "https://images-na.ssl-images-amazon.com/images/I/71-X-%2BX-%2BcL._AC_SX425_.jpg"
-    },
-    {
-        "name": "Monitor",
-        "price": 300,
-        "image": "https://images-na.ssl-images-amazon.com/images/I/71-X-%2BX-%2BcL._AC_SX425_.jpg"
-    },
-    {
-        "name": "Laptop",
-        "price": 1200,
-        "image": "https://images-na.ssl-images-amazon.com/images/I/71-X-%2BX-%2BcL._AC_SX425_.jpg"
-        },
-    {
-        "name": "Mouse",
-        "price": 100,
-        "image": "https://images-na.ssl-images-amazon.com/images/I/71-X-%2BX-%2BcL._AC_SX425_.jpg"
-    },
-    {
-        "name": "Keyboard",
-        "price": 200,
-        "image": "https://images-na.ssl-images-amazon.com/images/I/71-X-%2BX-%2BcL._AC_SX425_.jpg"
-    },
-    {
-        "name": "Monitor",
-        "price": 300,
-        "image": "https://images-na.ssl-images-amazon.com/images/I/71-X-%2BX-%2BcL._AC_SX425_.jpg"
-    },
-    {
-        "name": "Laptop",
-        "price": 1200,
-        "image": "https://images-na.ssl-images-amazon.com/images/I/71-X-%2BX-%2BcL._AC_SX425_.jpg"
-    },
-    {
-        "name": "Mouse",
-        "price": 100,
-        "image": "https://images-na.ssl-images-amazon.com/images/I/71-X-%2BX-%2BcL._AC_SX425_.jpg"
-    }
-])
-```
+### Forma 1
 
-## Listar todos los documentos en cada colección
+```js
+await mongoose.connect(
+  'mongodb+srv://cluster0.fkfefba.mongodb.net/myFirstDatabase?user=coderHouse&password=Q0o9V6pNU1rf9dxW'
+)
 
-```
-db.messages.find()
-db.products.find()
-```
-
-## Mostrar la cantidad de documentos almacenados en cada una de ellas
-
-```
-db.messages.count()
-db.products.count()
-```
-
-## Realizar un CRUD sobre la colección de productos
-
-### Agregar un producto más en la colección de productos
-
-````
-
-db.products.insertOne({
-    "name": "Laptop",
-    "price": 4330,
-    "image": "https://images-na.ssl-images-amazon.com/images/I/71-X-%2BX-%2BcL._AC_SX425_.jpg"
+const messageSchema = new mongoose.Schema({
+  message: { type: String, required: true },
+  email: { type: String, required: true },
+  timestamp: { type: Number, required: true }
 })
 
-
-    ```
-````
-
-### Realizar una consulta por nombre de producto específico
-
-- Listar los productos con precio menor a 1000 pesos.
-- Listar los productos con precio entre los 1000 a 3000 pesos.
-- Listar los productos con precio mayor a 3000 pesos.
-- Realizar una consulta que traiga sólo el nombre del tercer producto más barato.
-
-  ```
-  db.products.find({
-      "price": {
-          "$lt": 1000
-      }
-  })
-
-  db.products.find({
-      "price": {
-          "$gt": 1000,
-          "$lt": 3000
-      }
-  })
-
-  db.products.find({
-      "price": {
-          "$gt": 3000
-      }
-  })
-
-  db.products.find({
-      "price": {
-          "$lt": 1000
-      }
-  }).sort({
-      "price": 1
-  }).skip(2).limit(1)
-  ```
-
-## Hacer una actualización sobre todos los productos, agregando el campo stock a todos ellos con un valor de 100
-
-    ```
-    db.products.updateMany({}, {
-        "$set": {
-            "stock": 100
-        }
-    })
-    ```
-
-## Cambiar el stock a cero de los productos con precios mayores a 4000 pesos
-
-    ```
-    db.products.updateMany({
-        "price": {
-            "$gt": 4000
-        }
-    }, {
-        "$set": {
-            "stock": 0
-        }
-    })
-    ```
-
-    ## Borrar los productos con precio menor a 1000 pesos
-
-    ```
-    db.products.deleteMany({
-        "price": {
-            "$lt": 1000
-        }
-    })
-    ```
-
-# Crear un usuario 'pepe' clave: 'asd456' que sólo pueda leer la base de datos ecommerce. Verificar que pepe no pueda cambiar la información
-
-```mongo
-
-db.createUser({
-    "user": "pepe",
-    "pwd": "asd456",
-    "roles": [ {"role": "read", "db": "ecommerce"}]
+const productSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  price: { type: Number, required: true },
+  image: { type: String, required: false }
 })
 
-mongo -u lector -p 123456
+const messagesDb = mongoose.model('message', messageSchema)
+const productsDb = mongoose.model('product', productSchema)
 
-use ecommerce
-
-db.products.find()
-db.products.insertOne({
-    "name": "Laptop",
-    "price": 4330,
-    "image": "https://images-na.ssl-images-amazon.com/
-    images/I/71-X-%2BX-%2BcL._AC_SX425_.jpg"
+productsDb.create({
+  name: 'iPhone',
+  price: 12123,
+  image: 'https://cdn.mos.cms.futurecdn.net/9c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8.jpg'
 })
-// error
+```
 
+### Forma 2
+
+```js
+// Mongose
+
+import mongoose from 'mongoose'
+
+await mongoose.connect(
+  'mongodb+srv://cluster0.fkfefba.mongodb.net/myFirstDatabase?user=coderHouse&password=Q0o9V6pNU1rf9dxW'
+)
+
+const messageSchema = new mongoose.Schema({
+  message: { type: String, required: true },
+  email: { type: String, required: true },
+  timestamp: { type: Number, required: true }
+})
+
+const productSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  price: { type: Number, required: true },
+  image: { type: String, required: false }
+})
+
+const messagesDb = mongoose.model('message', messageSchema)
+const productsDb = mongoose.model('product', productSchema)
+
+productsDb.create({
+  name: 'iPhone',
+  price: 12123,
+  image: 'https://cdn.mos.cms.futurecdn.net/9c8c8c8c8c8c8c8c8c8c8c8c8c8c8c8.jpg'
+})
+```
+
+## Mongo db
+
+```js
+// new mongodb in cloud
+
+const user = 'coderhouse'
+const password = 'coderhouse'
+
+import { MongoClient, ServerApiVersion } from 'mongodb'
+const uri = `mongodb+srv://${user}:${password}@cluster0.fkfefba.mongodb.net/?retryWrites=true&w=majority`
+const client = new MongoClient(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverApi: ServerApiVersion.v1
+})
+
+try {
+  await client.connect()
+  const messages = client.db('messages').collection('messages')
+  await messages.insertOne({
+    message: 'Hello',
+    email: 'juan@mail.com',
+    timestamp: Date.now()
+  })
+  console.log(await messages.find({}).toArray())
+} catch (err) {
+  console.log(err)
+} finally {
+  client.close()
+}
+```
+
+### Firebase
+
+```js
+// Firebase
+
+// creamis un proyecto en firebase
+// crear una cuenta en firebase
+
+// craemos una firestore en firebase
+
+import admin, { firestore } from 'firebase-admin'
+import fs from 'fs'
+
+const serviceAccount = JSON.parse(
+  fs.readFileSync(
+    './coderhousebackend-3c2c8-firebase-adminsdk-x3svk-243d5c5330.json'
+  )
+)
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+})
+
+//traemos el firestore
+
+const db = admin.firestore()
+
+const dbMessages = db.collection('messages')
+
+// insertamos un mensaje
+const message = await dbMessages.add({
+  message: 'Hello',
+  email: 'asdas@assda.com',
+  timestamp: Date.now()
+}) // retorna mucas cosas
+
+const doc = await dbMessages.doc(message.id).get() // retorna un documento
+
+console.log({ id: doc.id, ...doc.data() })
+// para acceder a los datos del documento
+// debemos usar el metodo data(), para el id del documento el id
+
+// updatemos un documento
+
+await dbMessages.doc(message.id).set({
+  message: 'Cambiado',
+  email: 'cambiado@gmail.com'
+})
+
+// eliminamos un documento
+
+await dbMessages.doc(message.id).delete()
+
+// traemos todos los documentos
+
+const res = []
+const snapshot = await dbMessages.get() // esto es un objeto que a travez de un forEach nos va a iterar sobre todos los documentos
+// obligatoriante debemos usar el metodo forEach() ya que es un metodo de lo que nos devuelve firestore
+
+snapshot.forEach(doc => {
+  res.push({ id: doc.id, ...doc.data() })
+})
+console.log(res)
+
+// borrramos todos los documentos
+// version eficiente
+const batch = db.batch()
+snapshot.forEach(doc => {
+  batch.delete(doc.ref)
+})
+await batch.commit()
+
+// version mas simple
+
+const ref = firestore.collection('messages')
+ref.onSnapshot(snapshot => {
+  snapshot.docs.forEach(doc => {
+    ref.doc(doc.id).delete()
+  })
+})
 ```

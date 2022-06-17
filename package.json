@@ -1,0 +1,26 @@
+{
+  "scripts": {
+    "start": "nodemon ./src/main.js"
+  },
+  "type": "module",
+  "name": "backend",
+  "description": "Definir las claves de los documentos en relación a los campos de las tablas de esa base. En el caso de los productos, poner valores al campo precio entre los 100 y 5000 pesos(eligiendo valores intermedios, ej: 120, 580, 900, 1280, 1700, 2300, 2860, 3350, 4320, 4990).",
+  "version": "1.0.0",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fabroos/Backend_Ch.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fabroos/Backend_Ch/issues"
+  },
+  "homepage": "https://github.com/fabroos/Backend_Ch#readme",
+  "dependencies": {
+    "express": "^4.18.1",
+    "firebase-admin": "^10.3.0",
+    "mongodb": "^4.7.0",
+    "mongoose": "^6.3.6"
+  }
+}
