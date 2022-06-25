@@ -3,12 +3,12 @@ POST http://localhost:8080/api/messages
 Content-Type: application/json    
 
 {
-    "text": "Este es un mensaje de prueba",
+    "text": "re god el mensaje este",
     "author": {
-      "nombre": "Juan",
+      "nombre": "Juancito",
       "apellido": "Perez",
-      "edad": 25,
-      "alias": "juanperez",
+      "edad": 20,
+      "alias": "perezito",
       "avatar": "https://www.gravatar.com/avatar/12345678"
     }
 } 

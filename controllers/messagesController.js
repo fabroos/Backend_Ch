@@ -20,13 +20,7 @@ const messageController = {
       messageController.validateBody(req.body)
       const body = req.body
 
-      const list = messages.guardar({
-        ...body,
-        author: {
-          ...body.author,
-          id: body.author.alias
-        }
-      })
+      const list = messages.guardar(body)
       res.status(201).json(list)
     } catch (err) {
       res
@@ -37,10 +31,8 @@ const messageController = {
   getAllmessages: async function (req, res) {
     try {
       const list = await messages.listarAll()
-      const normalizedList = normalize(list, messageListSchema, {
-        idAttribute: '_id'
-      })
-      res.status(200).json(normalizedList)
+      const normalized = normalize(list, messageListSchema)
+      res.status(200).json(normalized)
     } catch (err) {
       res
         .status(err.status || 500)

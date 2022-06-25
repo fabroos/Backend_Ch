@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker'
 const router = express.Router('/api/products-test')
 
 const randomProduct = () => ({
-  id: faker.random.uuid(),
+  _id: faker.database.mongodbObjectId(),
   name: faker.commerce.productName(),
   price: faker.commerce.price(),
   description: faker.lorem.paragraph(),

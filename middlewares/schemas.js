@@ -10,13 +10,23 @@ const message = {
   texto: 'Este es un mensaje de prueba'
 }
 
-const author = new schema.Entity('author')
+const author = new schema.Entity(
+  'author',
+  {},
+  {
+    idAttribute: 'alias'
+  }
+)
 
-const messageSchema = new schema.Entity('message', {
-  author: author
-})
-const messageListSchema = new schema.Entity('messages', {
-  messages: [messageSchema]
-})
+const messageSchema = new schema.Entity(
+  'message',
+  {
+    author: author
+  },
+  {
+    idAttribute: '_id'
+  }
+)
+const messageListSchema = new schema.Array(messageSchema)
 
 export { messageSchema, messageListSchema }
