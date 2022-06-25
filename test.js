@@ -1,4 +1,5 @@
 // // tests
+import fetch from 'node-fetch'
 
 // fetch('http://localhost:8080/api/products')
 //   .then(res => res.json())
@@ -63,10 +64,21 @@ fetch('http://localhost:8080/api/messages')
 fetch('http://localhost:8080/api/messages', {
   method: 'POST',
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json charset=utf-8',
+    Accept: 'application/json'
   },
   body: JSON.stringify({
-    email: `fabrizio@gmail.com`,
-    message: `hola`
+    texto: 'Este es un mensaje de prueba',
+    autor: {
+      id: '1',
+      email: 'ejemplo@mail.com',
+      nombre: 'Juan',
+      apellido: 'Perez',
+      edad: 25,
+      alias: 'juanperez',
+      avatar: 'https://www.gravatar.com/avatar/12345678'
+    }
   })
 })
+  .then(res => res.json())
+  .then(data => console.log(data))

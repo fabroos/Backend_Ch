@@ -1,10 +1,6 @@
-import { Container } from '../api/Container.js'
-import { getConfig } from '../knexConfig.js'
-import { productSchema } from '../schemas.js'
+import Container from '../Containers/MongoDB.js'
 
-const products = new Container(getConfig('mysql'), 'products', productSchema)
-await products.init()
-
+const products = new Container('products')
 const ProductController = {
   createProduct: function (req, res) {
     try {
@@ -14,7 +10,7 @@ const ProductController = {
         err.status = 400
         throw err
       }
-      const list = products.save({ name, price, image })
+      const list = products.guardar({ name, price, image })
       res.status(201).json(list)
     } catch (err) {
       res
@@ -24,7 +20,7 @@ const ProductController = {
   },
   getAllProducts: async function (req, res) {
     try {
-      const list = await products.getAll()
+      const list = await products.listarAll()
       res.json(list)
     } catch (err) {
       res
@@ -46,7 +42,7 @@ const ProductController = {
         err.status = 400
         throw err
       }
-      const product = await products.update(req.params.id, newInfo)
+      const product = await products.actualizar(req.params.id, newInfo)
       res.json(product)
     } catch (err) {
       res
@@ -58,7 +54,7 @@ const ProductController = {
     try {
       const id = req.params.id
       this.validateId(id)
-      res.json(await products.getById(id))
+      res.json(await products.listar(id))
     } catch (err) {
       res
         .status(err.status || 500)
@@ -69,7 +65,7 @@ const ProductController = {
     try {
       const id = req.params.id
       this.validateId(id)
-      await products.deleteById(id)
+      await products.borrar(id)
       res.json({ message: 'Producto eliminado' })
     } catch (err) {
       res

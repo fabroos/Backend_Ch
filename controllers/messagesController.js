@@ -1,27 +1,32 @@
-import { Container } from '../api/Container.js'
-import { getConfig } from '../knexConfig.js'
-import { messageSchema } from '../schemas.js'
+import Container from '../Containers/MongoDB.js'
+import { normalize } from 'normalizr'
+import { messageListSchema, messageSchema } from '../middlewares/schemas.js'
 
-const messages = new Container(getConfig('sqlite3'), 'messages', messageSchema)
-await messages.init()
+const messages = new Container('messages')
 
 const messageController = {
-  validateId (id) {
-    if (isNaN(parseInt(id))) {
-      const err = new Error('El id debe ser un numero')
-      err.status = 400
-      throw err
-    }
+  validateBody: body => {
+    if (
+      !(
+        body.hasOwnProperty('text') &&
+        body.hasOwnProperty('author') &&
+        Object.keys(body.author).length === 5
+      )
+    )
+      throw new Error('Invalid body')
   },
   createmessage: function (req, res) {
     try {
-      const { email, message } = req.body
-      if (!email || !message) {
-        const err = new Error('Faltan datos')
-        err.status = 400
-        throw err
-      }
-      const list = messages.save({ email, message })
+      messageController.validateBody(req.body)
+      const body = req.body
+
+      const list = messages.guardar({
+        ...body,
+        author: {
+          ...body.author,
+          id: body.author.alias
+        }
+      })
       res.status(201).json(list)
     } catch (err) {
       res
@@ -31,8 +36,11 @@ const messageController = {
   },
   getAllmessages: async function (req, res) {
     try {
-      const list = await messages.getAll()
-      res.json(list)
+      const list = await messages.listarAll()
+      const normalizedList = normalize(list, messageListSchema, {
+        idAttribute: '_id'
+      })
+      res.status(200).json(normalizedList)
     } catch (err) {
       res
         .status(err.status || 500)
@@ -42,22 +50,13 @@ const messageController = {
   updatemessage: async function (req, res) {
     try {
       const { id } = req.params
-      messageController.validateId(id)
-      const { email, message } = req.body
-      if (!email && !message) {
-        const err = new Error('Faltan datos')
-        err.status = 400
-        throw err
-      }
-      const newInfo = {}
-      if (email) newInfo.email = email
-      if (message) newInfo.message = message
+      messageController.validateBody(req.body)
       if (Object.keys(newInfo).length === 0) {
         const err = new Error('No se recibieron datos')
         err.status = 400
         throw err
       }
-      const res = await messages.update(req.params.id, newInfo)
+      const res = await messages.actualizar(id, req.body)
       res.json(res)
     } catch (err) {
       res
@@ -68,8 +67,7 @@ const messageController = {
   getmessageById: async function (req, res) {
     try {
       const id = req.params.id
-      messageController.validateId(id)
-      res.json(await messages.getById(id))
+      res.json(await messages.listar(id))
     } catch (err) {
       throw err
     }
@@ -77,18 +75,24 @@ const messageController = {
   deletemessage: async function (req, res) {
     try {
       const id = req.params.id
-      console.log(this.validateId)
-      messageController.validateId(id)
-      await messages.deleteById(id)
-      res.json({ message: 'messageo eliminado' })
+      messageController.validateBody(req.body)
+      await messages.borrar(id)
+      res.json({ message: 'message eliminado' })
     } catch (err) {
       res
         .status(err.status || 500)
         .json({ error: err.message, status: err.status })
     }
   },
-  getTimestamp: function () {
-    return new Date().toISOString()
+  clearMessages: async function (req, res) {
+    try {
+      await messages.borrarAll()
+      res.json({ message: 'messages eliminados' })
+    } catch (err) {
+      res
+        .status(err.status || 500)
+        .json({ error: err.message, status: err.status })
+    }
   }
 }
 

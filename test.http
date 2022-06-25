@@ -1,0 +1,18 @@
+
+POST http://localhost:8080/api/messages
+Content-Type: application/json    
+
+{
+    "text": "Este es un mensaje de prueba",
+    "author": {
+      "nombre": "Juan",
+      "apellido": "Perez",
+      "edad": 25,
+      "alias": "juanperez",
+      "avatar": "https://www.gravatar.com/avatar/12345678"
+    }
+} 
+
+###
+
+DELETE http://localhost:8080/api/messages

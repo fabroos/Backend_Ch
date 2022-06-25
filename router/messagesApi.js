@@ -7,5 +7,6 @@ router.get('/:id', messageController.getmessageById)
 router.post('/', messageController.createmessage)
 router.put('/:id', messageController.updatemessage)
 router.delete('/:id', messageController.deletemessage)
+router.delete('/', messageController.clearMessages)
 
 export { router as messageRouter }
