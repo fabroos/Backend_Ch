@@ -1,10 +1,12 @@
+import MongoStore from 'connect-mongo'
 import express from 'express'
 import session from 'express-session'
-// import sfs from 'session-file-store'
-// const FileStore = sfs(session)
-import MongoStore from 'connect-mongo'
+import { messageRouter } from './router/messagesApi.js'
+import { productRouter } from './router/productsApi.js'
+import { productsTest } from './router/productsTest.js'
+import { authRouter } from './router/authRouter.js'
+import { webRouter } from './router/webRouter.js'
 const app = express()
-app.use(express.json())
 const mongoUrl =
   'mongodb+srv://coderhouse:coderhouse@cluster0.fkfefba.mongodb.net/ecommerce'
 app.use(
@@ -20,45 +22,23 @@ app.use(
     secret: 'token',
     resave: false,
     saveUninitialized: false,
-    maxAge: 600_000
+    cookie: {
+      maxAge: 600_000
+    }
   })
 )
 
-app.get('/contador', auth, (req, res) => {
-  if (req.session.contador) {
-    req.session.contador++
-    return res.send(`ha visitado el sitio ${req.session.contador} veces`)
-  }
-  req.session.contador = 1
+app.use(express.static('public'))
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
+app.use('/api/products', productRouter)
+app.use('/api/messages', messageRouter)
+app.use('/api/products-test', productsTest)
+app.use('/auth', authRouter)
+app.use('/', webRouter)
 
-  return res.send(`ha visitado el sitio ${req.session.contador} veces`)
-})
-
-function auth (req, res, next) {
-  if (req.session?.user === 'pepe' && req.session?.admin) {
-    return next()
-  }
-  return res.status(401).send('error de authorizacion')
-}
-
-app.get('/logout', (req, res) => {
-  console.log(req.session)
-  req.session.destroy(err => {
-    if (err) res.send({ status: 'logout err', body: err })
-    else res.send('logout ok')
-  })
-})
-
-app.get('/login', (req, res) => {
-  const { username, password } = req.query
-  if ((username !== 'pepe', password !== 'pepepass')) {
-    return res.send('login failed')
-  }
-  req.session.user = username
-  req.session.admin = true
-  res.send('login success')
-})
-
-app.listen(8080, () => {
-  console.log('listen in port 8080')
+const PORT = process.env.PORT || 8080
+const server = app.listen(PORT, () => {
+  console.log(`Server is running on port ${server.address().port}
+  http://localhost:${server.address().port}`)
 })

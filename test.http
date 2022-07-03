@@ -1,0 +1,18 @@
+GET 
+POST http://localhost:8080/api/messages
+Content-Type: application/json    
+
+{
+    "text": "re god el mensaje este",
+    "author": {
+      "nombre": "Juancito",
+      "apellido": "Perez",
+      "edad": 20,
+      "alias": "perezito",
+      "avatar": "https://www.gravatar.com/avatar/12345678"
+    }
+} 
+
+###
+
+DELETE http://localhost:8080/api/messages

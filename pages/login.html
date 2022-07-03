@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="login.js" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="w-screen h-screen flex justify-center items-center">
+      <section
+        class="border p-6 flex-1 flex-col flex justify-center gap-4 max-w-fit"
+      >
+        <form
+          action=""
+          class="flex gap-2 flex-col md:flex-row m-auto"
+          id="message-form"
+        >
+          <input
+            type="text"
+            class="border px-2  text-sm"
+            id="email"
+            placeholder="Email..."
+            name="email"
+          />
+          <input
+            type="password"
+            class="border px-2  text-sm"
+            id="password"
+            placeholder="password..."
+            name="message"
+          />
+          <button class=" px-4 py-1 bg-gray-400 text-white hover:bg-gray-500">
+            Send
+          </button>
+        </form>
+        <div class="error text-red-500 text-center"></div>
+      </section>
+    </div>
+  </body>
+</html>
