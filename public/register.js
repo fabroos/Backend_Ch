@@ -5,7 +5,7 @@ form.addEventListener('submit', function (e) {
   const email = $('#email').value
   const password = $('#password').value
   const data = { email, password }
-  fetch('/auth/login', {
+  fetch('/auth/register', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -14,7 +14,6 @@ form.addEventListener('submit', function (e) {
   })
     .then(res => res.json())
     .then(res => {
-      console.log(res)
       if (res.status === 200) {
         window.location.href = '/'
       } else {

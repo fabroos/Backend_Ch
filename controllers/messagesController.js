@@ -1,6 +1,6 @@
 import Container from '../Containers/MongoDB.js'
 import { normalize } from 'normalizr'
-import { messageListSchema, messageSchema } from '../middlewares/schemas.js'
+import { messageListSchema, messageSchema } from '../schemas/schemas.js'
 
 const messages = new Container('messages')
 

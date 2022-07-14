@@ -11,4 +11,7 @@ router.get('/login', (req, res) => {
   res.sendFile('login.html', { root: './pages' })
 })
 
+router.get('/register', (req, res) => {
+  res.sendFile('register.html', { root: './pages' })
+})
 export { router as webRouter }

@@ -1,5 +1,5 @@
 export function auth (req, res, next) {
-  if (req.session?.email) {
+  if (req.isAuthenticated()) {
     return next()
   }
   return res.redirect('/login')

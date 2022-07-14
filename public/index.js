@@ -7,9 +7,7 @@
 //   .then(res => renderMessages(res))
 
 document.querySelector('#logout').addEventListener('click', () => {
-  fetch('/auth/logout', {
-    method: 'POST'
-  })
+  fetch('/auth/logout')
     .then(res => res.json())
     .then(() => {
       window.location.replace('/')

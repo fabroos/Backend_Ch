@@ -2,7 +2,7 @@ const user = 'coderhouse'
 const password = 'coderhouse'
 import { normalize } from 'normalizr'
 const uri = `mongodb+srv://${user}:${password}@cluster0.fkfefba.mongodb.net/ecommerce?retryWrites=true&w=majority`
-import { messageListSchema, messageSchema } from '../middlewares/schemas.js'
+import { messageListSchema, messageSchema } from '../schemas/schemas.js'
 import { MongoClient, ObjectId } from 'mongodb'
 
 const client = new MongoClient(uri, {
@@ -15,6 +15,7 @@ class ContenedorMongoDb {
   constructor (nombreColeccion) {
     this.coleccion = nombreColeccion
     this.db = client.db('ecommerce')
+    this.client = client
   }
 
   async listar (id) {
