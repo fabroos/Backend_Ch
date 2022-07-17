@@ -1,11 +1,9 @@
-const user = 'coderhouse'
-const password = 'coderhouse'
 import { normalize } from 'normalizr'
-const uri = `mongodb+srv://${user}:${password}@cluster0.fkfefba.mongodb.net/ecommerce?retryWrites=true&w=majority`
+
 import { messageListSchema, messageSchema } from '../schemas/schemas.js'
 import { MongoClient, ObjectId } from 'mongodb'
 
-const client = new MongoClient(uri, {
+const client = new MongoClient(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   serverSelectionTimeoutMS: 5000

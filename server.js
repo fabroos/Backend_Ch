@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import express from 'express'
 import { sessionHandler } from './middlewares/session.js'
 import { messageRouter } from './router/messagesApi.js'
@@ -10,6 +11,10 @@ import {
   passortSessionMiddleware,
   passportMiddleware
 } from './middlewares/passport.js'
+import yargs from 'yargs'
+
+const args = yargs(process.argv.slice(2)).argv
+
 const app = express()
 app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true }))
@@ -24,7 +29,7 @@ app.use('/auth', authRouter)
 app.use('/users', usersRouter)
 app.use('/', webRouter)
 
-const PORT = process.env.PORT || 8080
+const PORT = args.p || 8080
 const server = app.listen(PORT, () => {
   console.log(`Server is running on port ${server.address().port}
   http://localhost:${server.address().port}`)
