@@ -55,14 +55,12 @@ passport.use(
     async (req, email, password, done) => {
       try {
         const user = await users.obtenerUsuarioPorMail(email)
-
         if (!user) return done(null, false, { message: 'User not found' })
         bcrypt.compare(password, user.password, (err, result) => {
-          console.log(result)
-          if (err) {
-            return done({ message: 'credentials are invalid' })
+          if (result) {
+            return done(null, user, { message: 'Login success' })
           }
-          return done(null, user)
+          return done({ message: 'credentials are invalid' })
         })
       } catch (error) {
         return done(null, false)
