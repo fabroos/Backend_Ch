@@ -1,10 +1,9 @@
 import bcrypt from 'bcrypt'
 import passport from 'passport'
 import { Strategy as LocalStrategy } from 'passport-local'
-
 import { UsersContainer } from '../Containers/UsersContainer.js'
-
 const users = new UsersContainer()
+const saltRounds = 10
 
 function validateMail (email) {
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -56,7 +55,7 @@ passport.use(
     async (req, email, password, done) => {
       try {
         const user = await users.obtenerUsuarioPorMail(email)
-        console.log(user)
+
         if (!user) return done(null, false, { message: 'User not found' })
         bcrypt.compare(password, user.password, (err, result) => {
           console.log(result)

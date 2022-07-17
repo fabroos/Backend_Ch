@@ -24,8 +24,6 @@ class ContenedorMongoDb {
       let res = await this.db
         .collection(this.coleccion)
         .findOne({ _id: ObjectId(id) })
-      res.id = res._id
-      delete res._id
       return res
     } catch (err) {
       return null
@@ -37,12 +35,10 @@ class ContenedorMongoDb {
   async listarAll () {
     try {
       await client.connect()
-
       const elements = await this.db
         .collection(this.coleccion)
         .find({})
         .toArray()
-
       return elements
     } catch (err) {
       throw err
@@ -57,8 +53,6 @@ class ContenedorMongoDb {
       const { insertedId } = await this.db
         .collection(this.coleccion)
         .insertOne(nuevoElem)
-      nuevoElem.id = nuevoElem._id
-      delete nuevoElem._id
       return { ...nuevoElem }
     } catch (err) {
       throw err
