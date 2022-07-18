@@ -38,7 +38,7 @@ const authController = {
   },
   failureLogin: (req, res) => {
     res.status(400).json({
-      message: res.session.messages.pop(),
+      message: req.session.messages.pop(),
       status: 400
     })
   },

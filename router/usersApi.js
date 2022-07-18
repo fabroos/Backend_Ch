@@ -1,7 +1,6 @@
 import express from 'express'
 import Container from '../Containers/MongoDB.js'
 import bcrypt from 'bcrypt'
-const saltRounds = 10
 
 const router = express.Router()
 

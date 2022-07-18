@@ -10,6 +10,7 @@ import {
   passortSessionMiddleware,
   passportMiddleware
 } from './middlewares/passport.js'
+import { fork } from 'child_process'
 const app = express()
 app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true }))
@@ -23,6 +24,17 @@ app.use('/api/products-test', productsTest)
 app.use('/auth', authRouter)
 app.use('/users', usersRouter)
 app.use('/', webRouter)
+
+app.get('/api/random', (req, res) => {
+  const process = fork('./calcularRandom.js')
+  process.on('message', data => {
+    if (data === 'end') {
+      process.send(req.query.cant)
+    } else {
+      res.json(data)
+    }
+  })
+})
 
 const PORT = process.env.PORT || 8080
 const server = app.listen(PORT, () => {
