@@ -28,6 +28,16 @@ app.use('/api/products-test', productsTest)
 app.use('/auth', authRouter)
 app.use('/users', usersRouter)
 app.use('/', webRouter)
+app.get('/api/random', (req, res) => {
+  const process = fork('./calcularRandom.js')
+  process.on('message', data => {
+    if (data === 'end') {
+      process.send(req.query.cant || 10000000)
+    } else {
+      res.json(data)
+    }
+  })
+})
 
 const PORT = args.p || 8080
 const server = app.listen(PORT, () => {
