@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { auth } from '../middlewares/auth.js'
-
+import os from 'os'
 const router = Router()
 
 router.get('/', auth, (req, res) => {
@@ -21,7 +21,7 @@ router.get('/info', (req, res) => {
     so: process.platform,
     nodeVersion: process.version,
     rss: process.memoryUsage().rss,
-
+    totalCPU: os.cpus().length,
     processId: process.pid,
     folderProyect: process.cwd()
   })

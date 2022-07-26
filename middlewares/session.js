@@ -1,7 +1,6 @@
 import session from 'express-session'
 import MongoStore from 'connect-mongo'
-const mongoUrl =
-  'mongodb+srv://coderhouse:coderhouse@cluster0.fkfefba.mongodb.net/ecommerce'
+const mongoUrl = process.env.MONGODB_URI
 
 export const sessionHandler = session({
   // store: new FileStore({ path: './sessions', ttl: 300, retries: 0 }),

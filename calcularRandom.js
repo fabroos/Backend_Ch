@@ -13,3 +13,5 @@ process.on('message', msg => {
 })
 
 process.send('end')
+
+export { calcular }

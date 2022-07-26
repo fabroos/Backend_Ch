@@ -2,11 +2,15 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "## How to use cookies in server",
-  "main": "server.js",
+  "main": "main.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js -p=3000"
+    "start:pm2": "pm2 start main.js --name=serverX --watch  -i 2 -- -p=8080 -mode=fork && sudo nginx -s reload",
+    "delete:pm2": "pm2 delete serverX",
+    "start:dev": "nodemon main.js -p=8080 -mode=cluster",
+    "start": "node main.js -mode=cluster --p 8080",
+    "desafio": "pm2 start main.js --name=server8080 --watch -- -p=8080 --mode=cluster && pm2 start main.js --name=server8081 --watch  -i 4 -- -p=8081 --mode=fork && sudo nginx -s reload"
   },
   "repository": {
     "type": "git",

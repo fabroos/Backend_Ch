@@ -1,15 +1,5 @@
 import { MongoClient } from 'mongodb'
 import Container from './MongoDB.js'
-const user = 'coderhouse'
-const password = 'coderhouse'
-
-const uri = `mongodb+srv://${user}:${password}@cluster0.fkfefba.mongodb.net/ecommerce?retryWrites=true&w=majority`
-
-const client = new MongoClient(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  serverSelectionTimeoutMS: 5000
-})
 
 class UsersContainer extends Container {
   constructor () {
